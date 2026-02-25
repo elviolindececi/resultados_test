@@ -9,7 +9,17 @@ const {
   escapeHtml,
   investmentBlock,
   getSetlistTeasers_,
-  renderSetlistHTML_
+  renderSetlistHTML_,
+
+  consultDeepDiveHTML,
+  consultSecondaryInfluence,
+  consultIntensityImplicationsHTML,
+  consultVariablesImpactHTML,
+  consultAestheticDiagnosisHTML,
+  consultRisksHTML,
+  consultStrategyRecommendation,
+  consultProductionLevel,
+  consultNextStep
 } = window.CECI_DATA;
 
 function show(id){
@@ -69,16 +79,18 @@ function setQueryParams({p, s, i, mi}){
   return url.toString();
 }
 
-function renderResult({
-  primaryKey,
-  secondaryKey,
-  intensityKey,
-  musicImportance,
-  invitados,
-  venue,
-  planningVibeLabel,
-  curationStyleLabel
-}){
+function renderResult(state){
+  const {
+    primaryKey,
+    secondaryKey,
+    intensityKey,
+    musicImportance,
+    invitados,
+    venue,
+    planningVibeLabel,
+    curationStyleLabel
+  } = state;
+
   const a1 = archetypes[primaryKey];
   const a2 = archetypes[secondaryKey];
   const m = musicModules[intensityKey];
@@ -91,15 +103,16 @@ function renderResult({
   const btnWA = $("#btn-wa");
 
   const teasers = getSetlistTeasers_(primaryKey, intensityKey, 2);
+
   const planningText = planningVibeLabel ? ` · 🧩 Planificación: ${planningVibeLabel}` : "";
   const curationText = curationStyleLabel ? ` · 🎼 Selección: ${curationStyleLabel}` : "";
 
-  // En dashboard no calculamos prioridad/índice por fecha/venue (porque acá entrás directo con perfil).
-  // Mostramos un subtítulo claro para reunión.
+  // Título / subtítulo (como el test)
   resultTitle.textContent = `Resultado: ${a1.name}`;
   resultSubtitle.textContent =
-    `Secundario: ${a2.name} · Intensidad: ${m.name} · Importancia música: ${musicImportance}/10`;
+    `Intensidad musical: ${m.name} · Importancia música: ${musicImportance}/10`;
 
+  // BRIEF (igual al test + datos)
   resultBrief.innerHTML = `
     <h3>${escapeHtml(a1.tagline)}</h3>
     <p>${escapeHtml(a1.brief)}</p>
@@ -119,9 +132,8 @@ function renderResult({
     <p class="muted" style="margin-top:10px;">En el análisis completo está el setlist por momentos (ceremonia, cóctel y wow).</p>
   `;
 
-  // Índice/“prioridad” del test no aplica 1:1 sin fecha; mantenemos el bloque premium como “afinidad”
+  // Mantengo el bloque “Índice de Diseño Emocional” (misma estética)
   const indice = (primaryKey === "A") ? 92 : (primaryKey === "B") ? 86 : 78;
-
   const gold = `
     <div class="gold-card">
       <div class="gold-title">Índice de Diseño Emocional</div>
@@ -136,6 +148,7 @@ function renderResult({
     </div>
   `;
 
+  // Curación (igual al test)
   const curationBlock = curationStyleLabel ? `
     <hr/>
     <h3>🎼 Cómo les conviene elegir las canciones</h3>
@@ -148,36 +161,82 @@ function renderResult({
     }</p>
   ` : "";
 
+  // NUEVO: bloques consultivos (elegantes, desarrollados)
+  const diagnosis = consultAestheticDiagnosisHTML(primaryKey);
+  const deepDive = consultDeepDiveHTML(primaryKey);
+  const secInfluence = `
+    <h3>✨ Influencia del Arquetipo Secundario</h3>
+    <p>${escapeHtml(consultSecondaryInfluence(primaryKey, secondaryKey))}</p>
+  `;
+  const intensityImp = consultIntensityImplicationsHTML(intensityKey);
+
+  const variablesImpact = consultVariablesImpactHTML({
+    musicImportance,
+    invitados,
+    venue,
+    planningVibeLabel,
+    curationStyleLabel
+  });
+
+  const risks = consultRisksHTML(intensityKey);
+
+  const strategy = consultStrategyRecommendation(primaryKey, intensityKey, invitados);
+  const production = consultProductionLevel(intensityKey);
+  const nextStep = consultNextStep(primaryKey, intensityKey);
+
+  // DETAILS (incluye todo lo del test + desarrollo)
   resultDetails.innerHTML = `
+    ${diagnosis}
+
+    <hr/>
     <h3>🔎 Lo que esto dice sobre ustedes</h3>
     <p>${escapeHtml(a1.full)}</p>
 
     <hr/>
+    ${deepDive}
 
+    <hr/>
     <h3>✨ Matiz secundario</h3>
     <p><strong>${escapeHtml(a2.name)}</strong> — ${escapeHtml(a2.tagline)}</p>
 
     <hr/>
+    ${secInfluence}
 
+    <hr/>
     <h3>🎶 Cómo debería vivirse su música</h3>
     <p>${escapeHtml(m.full)}</p>
+
+    <hr/>
+    ${intensityImp}
+
+    <hr/>
+    ${variablesImpact}
 
     ${gold}
 
     <hr/>
+    ${risks}
 
+    <hr/>
+    ${strategy}
+
+    <hr/>
     <h3>💎 Perfil de inversión</h3>
     <p>${escapeHtml(investmentBlock(intensityKey))}</p>
 
     ${curationBlock}
 
     <hr/>
+    ${production}
 
+    <hr/>
+    ${nextStep}
+
+    <hr/>
     <h3>🎼 Set recomendado (formato)</h3>
     <ul>${a1.set.map(x => `<li>${escapeHtml(x)}</li>`).join("")}</ul>
 
     <hr/>
-
     <h3>🎵 Setlist sugerido (canciones ideales)</h3>
     ${renderSetlistHTML_(primaryKey, intensityKey)}
   `;
@@ -186,6 +245,7 @@ function renderResult({
   resultDetails.classList.add("hidden");
   btnToggleDetails.textContent = "Ver análisis completo";
 
+  // Texto WhatsApp elegante
   const waText =
     `Hola Ceci! En reunión trabajamos este perfil: ${a1.name} (secundario: ${a2.name}). ` +
     `Intensidad: ${m.name}. Importancia música: ${musicImportance}/10. ` +
@@ -196,12 +256,10 @@ function renderResult({
 
   btnWA.setAttribute("href", `${WHATSAPP_BASE}?text=${encodeURIComponent(waText)}`);
 
-  // Guardamos un resumen para "copiar resumen"
   return waText;
 }
 
 function init(){
-  // Elements
   const form = $("#dash-form");
   const primary = $("#primary");
   const secondary = $("#secondary");
@@ -218,14 +276,13 @@ function init(){
   const resultDetails = $("#result-details");
   const btnCopySummary = $("#btn-copy-summary");
 
-  const btnLoadFromLink = $("#btn-load-from-link");
+  const btnGenerateLink = $("#btn-generate-link");
   const shareBox = $("#share-box");
   const shareUrl = $("#share-url");
   const btnCopyLink = $("#btn-copy-link");
 
   if (btnIG) btnIG.setAttribute("href", INSTAGRAM_URL);
 
-  // Populate selects
   buildSelectOptions(primary, [
     { value:"A", label: archetypes.A.name },
     { value:"B", label: archetypes.B.name },
@@ -262,7 +319,6 @@ function init(){
 
   let lastSummaryText = "";
 
-  // If query has required fields, auto render
   if (p && s && i){
     lastSummaryText = renderResult({
       primaryKey: p,
@@ -305,7 +361,6 @@ function init(){
       curationStyleLabel: curationStyle.value || ""
     });
 
-    // Update URL (para abrir directo)
     const newUrl = setQueryParams({ p: pk, s: sk, i: ik, mi: mi2 });
     window.history.replaceState({}, "", newUrl);
 
@@ -321,9 +376,7 @@ function init(){
   });
 
   // Back
-  btnBack.addEventListener("click", () => {
-    show("#screen-input");
-  });
+  btnBack.addEventListener("click", () => show("#screen-input"));
 
   // Copy summary
   btnCopySummary.addEventListener("click", async () => {
@@ -337,7 +390,7 @@ function init(){
   });
 
   // Share link generator
-  btnLoadFromLink.addEventListener("click", () => {
+  btnGenerateLink.addEventListener("click", () => {
     const pk = primary.value;
     const sk = secondary.value;
     const ik = intensity.value;
