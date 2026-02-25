@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>El Violín de Ceci — Dashboard de Resultados</title>
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="brand">
+      <div class="logo" aria-hidden="true">🎻</div>
+      <div>
+        <h1>El Violín de Ceci</h1>
+        <p class="subtitle">Dashboard de Resultados (reuniones)</p>
+      </div>
+    </header>
+
+    <!-- INPUT -->
+    <section class="card screen" id="screen-input">
+      <h2>Generar resultado (mismo output que el test)</h2>
+      <p class="muted" style="margin-bottom:12px;">
+        Elegí <strong>arquetipo principal</strong>, <strong>secundario</strong> e <strong>intensidad</strong>.
+        (Opcional: importancia música / venue / invitados para enriquecer el resumen.)
+      </p>
+
+      <form id="dash-form" class="form" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label for="primary">Arquetipo principal <span class="req">*</span></label>
+            <select id="primary" required></select>
+          </div>
+
+          <div class="field">
+            <label for="secondary">Arquetipo secundario <span class="req">*</span></label>
+            <select id="secondary" required></select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="intensity">Intensidad musical <span class="req">*</span></label>
+            <select id="intensity" required></select>
+          </div>
+
+          <div class="field">
+            <label for="musicImportance">Importancia de la música (0–10)</label>
+            <input id="musicImportance" type="number" min="0" max="10" step="1" value="5" />
+            <small>Esto solo afecta el texto/resumen (no recalcula arquetipos).</small>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="invitados">Invitados (opcional)</label>
+            <select id="invitados">
+              <option value="">—</option>
+              <option>Menos de 80</option>
+              <option>80 – 150</option>
+              <option>150 – 250</option>
+              <option>Más de 250</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="venue">Venue (opcional)</label>
+            <input id="venue" type="text" placeholder="Ej: Casa 1927 / Soir / etc." />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="planningVibe">Planificación (opcional)</label>
+          <select id="planningVibe">
+            <option value="">—</option>
+            <option>Tablero ordenado (todo va encajando)</option>
+            <option>Moodboard en construcción (inspiración)</option>
+            <option>Lista infinita (mucho por resolver)</option>
+            <option>Aventura paso a paso (relajados)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="curationStyle">Selección de canciones (opcional)</label>
+          <select id="curationStyle">
+            <option value="">—</option>
+            <option>Que Ceci lo resuelva (cero estrés)</option>
+            <option>Mitad y mitad (Ceci propone + ustedes eligen)</option>
+            <option>Quieren involucrarse (detalle)</option>
+          </select>
+        </div>
+
+        <div class="cta-row split stack">
+          <button class="btn primary" type="submit">Ver resultado</button>
+          <button class="btn ghost" id="btn-load-from-link" type="button">Generar link compartible</button>
+        </div>
+
+        <p class="fineprint">
+          <span class="req">*</span> Campos obligatorios. El link compartible guarda: principal, secundario, intensidad y musicImportance.
+        </p>
+
+        <div class="result-box hidden" id="share-box" hidden>
+          <h3>Link compartible</h3>
+          <p class="muted" style="margin-bottom:8px;">Copiá y pegá este link para abrir directo el resultado.</p>
+          <div class="share-row">
+            <input id="share-url" type="text" readonly />
+            <button class="btn ghost" id="btn-copy-link" type="button">Copiar</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESULT -->
+    <section class="card screen hidden" id="screen-result" hidden aria-live="polite">
+      <div class="progress" aria-label="Progreso final">
+        <div class="bar" style="width: 100%"></div>
+      </div>
+
+      <h2 id="result-title">Resultado</h2>
+      <p class="muted" id="result-subtitle"></p>
+
+      <div class="result-box" id="result-brief"></div>
+
+      <div class="cta-row split stack">
+        <button class="btn ghost" id="btn-toggle-details" type="button">Ver análisis completo</button>
+        <button class="btn ghost" id="btn-copy-summary" type="button">Copiar resumen</button>
+        <button class="btn ghost" id="btn-back" type="button">Editar datos</button>
+      </div>
+
+      <div class="result-box hidden" id="result-details" hidden></div>
+
+      <div class="cta-row split stack">
+        <a class="btn ghost" id="btn-ig"
+           href="https://www.instagram.com/elviolindececi/"
+           target="_blank" rel="noopener">
+          Instagram
+        </a>
+
+        <a class="btn primary" id="btn-wa"
+           href="https://wa.me/595985689454"
+           target="_blank" rel="noopener">
+          Abrir WhatsApp (mensaje listo)
+        </a>
+      </div>
+
+      <p class="fineprint">
+        Tip: podés usar “Copiar resumen” y pegarlo en WhatsApp/Notas durante la reunión.
+      </p>
+    </section>
+
+    <footer class="foot">
+      <span>© El Violín de Ceci</span>
+    </footer>
+  </main>
+
+  <script src="data.js?v=1"></script>
+  <script src="app.js?v=1" defer></script>
+</body>
+</html>
