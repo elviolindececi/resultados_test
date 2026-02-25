@@ -198,28 +198,10 @@ h2{
   gap:10px;
   align-items:center;
 }
-.share-row input{
-  flex:1;
-}
+.share-row input{ flex:1; }
 
 @media (max-width: 420px){
   .btn{ min-width: 0; width: 100%; }
   .cta-row.split{ justify-content:center; }
   .share-row{ flex-direction: column; }
-}
-
-/* Badge dorado (mismo estilo que el test) */
-.q-icon-badge{
-  width:28px;
-  height:28px;
-  border-radius:10px;
-  display:inline-grid;
-  place-items:center;
-  flex: 0 0 auto;
-  margin-top:2px;
-  background: rgba(215,180,106,.18);
-  border: 1px solid rgba(215,180,106,.45);
-  box-shadow:
-    0 0 10px rgba(215,180,106,.20),
-    inset 0 1px 0 rgba(255,255,255,.10);
 }
