@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>El Violín de Ceci — Dashboard de Resultados</title>
-  <link rel="stylesheet" href="styles.css?v=1" />
+  <title>El Violín de Ceci — Dashboard Consultivo</title>
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <main class="wrap">
@@ -12,16 +12,16 @@
       <div class="logo" aria-hidden="true">🎻</div>
       <div>
         <h1>El Violín de Ceci</h1>
-        <p class="subtitle">Dashboard de Resultados (reuniones)</p>
+        <p class="subtitle">Dashboard Consultivo (Resultados + Dirección Musical)</p>
       </div>
     </header>
 
     <!-- INPUT -->
     <section class="card screen" id="screen-input">
-      <h2>Generar resultado (mismo output que el test)</h2>
+      <h2>Generar resultado (idéntico al test + consultoría elegante)</h2>
       <p class="muted" style="margin-bottom:12px;">
-        Elegí <strong>arquetipo principal</strong>, <strong>secundario</strong> e <strong>intensidad</strong>.
-        (Opcional: importancia música / venue / invitados para enriquecer el resumen.)
+        Seleccioná <strong>arquetipo principal</strong>, <strong>secundario</strong> e <strong>intensidad</strong>.
+        (Opcional: variables para enriquecer la consultoría.)
       </p>
 
       <form id="dash-form" class="form" novalidate>
@@ -46,7 +46,7 @@
           <div class="field">
             <label for="musicImportance">Importancia de la música (0–10)</label>
             <input id="musicImportance" type="number" min="0" max="10" step="1" value="5" />
-            <small>Esto solo afecta el texto/resumen (no recalcula arquetipos).</small>
+            <small>Esto enriquece el diagnóstico (no recalcula arquetipos).</small>
           </div>
         </div>
 
@@ -91,11 +91,11 @@
 
         <div class="cta-row split stack">
           <button class="btn primary" type="submit">Ver resultado</button>
-          <button class="btn ghost" id="btn-load-from-link" type="button">Generar link compartible</button>
+          <button class="btn ghost" id="btn-generate-link" type="button">Generar link compartible</button>
         </div>
 
         <p class="fineprint">
-          <span class="req">*</span> Campos obligatorios. El link compartible guarda: principal, secundario, intensidad y musicImportance.
+          <span class="req">*</span> Campos obligatorios. El link guarda: principal, secundario, intensidad y musicImportance.
         </p>
 
         <div class="result-box hidden" id="share-box" hidden>
@@ -143,7 +143,7 @@
       </div>
 
       <p class="fineprint">
-        Tip: podés usar “Copiar resumen” y pegarlo en WhatsApp/Notas durante la reunión.
+        Tip: “Copiar resumen” pega un texto elegante para WhatsApp / Notas durante la reunión.
       </p>
     </section>
 
@@ -152,7 +152,7 @@
     </footer>
   </main>
 
-  <script src="data.js?v=1"></script>
-  <script src="app.js?v=1" defer></script>
+  <script src="data.js?v=2"></script>
+  <script src="app.js?v=2" defer></script>
 </body>
 </html>
